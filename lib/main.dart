@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -57,6 +58,26 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+    final rootElementDiagnosticsNode =
+        WidgetsBinding.instance?.renderViewElement?.toDiagnosticsNode();
+
+    final delegate = InspectorSerializationDelegate(
+        groupName: 'RandomGroupName',
+        subtreeDepth: 1000000,
+        summaryTree: true,
+        service: WidgetInspectorService.instance,
+        addAdditionalPropertiesCallback: (node, delegate) {
+          print('DO STUFF WITH MY NODE HERE');
+          print(node);
+          final Map<String, Object> result = <String, Object>{};
+          final Element element = node.value as Element;
+          result['class_name'] = element.runtimeType.toString();
+          return result;
+        });
+    final customWidgetSummaryTree =
+        rootElementDiagnosticsNode?.toJsonMap(delegate);
+    print(customWidgetSummaryTree);
   }
 
   @override
