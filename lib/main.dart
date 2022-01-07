@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sandbox/custom_inspector_delegate.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,10 +47,52 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+class CustomDiagnosticableNode extends DiagnosticableNode {
+  CustomDiagnosticableNode({
+    String? name,
+    required value,
+    required DiagnosticsTreeStyle? style,
+  }) : super(
+          name: name,
+          style: style,
+          value: value,
+        );
+
+  @override
+  Map<String, Object?> toJsonMap(DiagnosticsSerializationDelegate delegate) {
+    Map<String, Object?> result = <String, Object?>{};
+    result['Hello'] = 'WorldoooooooOOOOOO';
+    super.toJsonMap(delegate);
+    return result;
+  }
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _text = "";
 
   void _incrementCounter() {
+    final rootElementDiagnosticsNode =
+        WidgetsBinding.instance?.renderViewElement?.toDiagnosticsNode();
+
+    final delegate = CustomDelegate(
+      groupName: 'RandomGroupName',
+      subtreeDepth: 1000000,
+      summaryTree: true,
+      service: WidgetInspectorService.instance,
+      // addAdditionalPropertiesCallback: (node, delegate) {
+      //   print('DO STUFF WITH MY NODE HERE');
+      //   print(node);
+      //   final Map<String, Object> result = <String, Object>{};
+      //   final Element element = node.value as Element;
+      //   result['class_name'] = element.runtimeType.toString();
+      //   return result;
+      // }
+    );
+    final customWidgetSummaryTree =
+        rootElementDiagnosticsNode?.toJsonMap(delegate);
+    print(customWidgetSummaryTree);
+
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -57,27 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      _text = customWidgetSummaryTree.toString();
     });
-
-    final rootElementDiagnosticsNode =
-        WidgetsBinding.instance?.renderViewElement?.toDiagnosticsNode();
-
-    final delegate = InspectorSerializationDelegate(
-        groupName: 'RandomGroupName',
-        subtreeDepth: 1000000,
-        summaryTree: true,
-        service: WidgetInspectorService.instance,
-        addAdditionalPropertiesCallback: (node, delegate) {
-          print('DO STUFF WITH MY NODE HERE');
-          print(node);
-          final Map<String, Object> result = <String, Object>{};
-          final Element element = node.value as Element;
-          result['class_name'] = element.runtimeType.toString();
-          return result;
-        });
-    final customWidgetSummaryTree =
-        rootElementDiagnosticsNode?.toJsonMap(delegate);
-    print(customWidgetSummaryTree);
   }
 
   @override
@@ -115,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              _text,
             ),
             Text(
               '$_counter',
