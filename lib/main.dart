@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sandbox/global_gestures_listener_plugin/global_gestures_listener.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,6 +16,7 @@ class _MyAppState extends State<MyApp> {
   int _counter = 0;
 
   void _doStuff() {
+    print('🔵 Any child button DETECTED TAP');
     setState(() {
       _counter++;
     });
@@ -22,28 +24,30 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Here is the result of the stuff you've done:"),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ],
+    return GlobalGesturesListener(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _doStuff,
-          tooltip: 'Do stuff...',
-          child: Icon(Icons.science),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Here is the result of the stuff you've done:"),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _doStuff,
+            tooltip: 'Do stuff...',
+            child: Icon(Icons.science),
+          ),
         ),
       ),
     );
