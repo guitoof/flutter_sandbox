@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sandbox/global_gestures_listener_plugin/global_gestures_listener.dart';
+import 'package:flutter_sandbox/global_gestures_listener_plugin/global_gesture_listener_with_stack.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,10 +24,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalGesturesListener(
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        home: Scaffold(
+    return MaterialApp(
+      title: 'Flutter Demo',
+      home: GlobalGestureListenerWithStack(
+        child: Scaffold(
           appBar: AppBar(
             title: Text(widget.title),
           ),
