@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +11,8 @@ void main() {
     await tester.pumpWidget(MyApp(onGestureDetected: (DragEndDetails details) {
       expect(
         details.velocity.pixelsPerSecond.dy,
-        equals(double.infinity), // <------- We expect an infinite speed
+        equals(
+            kMaxFlingVelocity), // <------- We expect a velocity of kMaxFlingVelocity
       );
     }));
     await tester.flingFrom(
