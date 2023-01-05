@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final authClient = Supabase.instance.client.auth;
+
+Future<void> signUp(String email, String password) async {
+  final response = await authClient.signUp(email: email, password: password);
+  final Session? session = response.session;
+  final User? user = response.user;
+}
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({super.key});
@@ -12,8 +21,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   String password = '';
 
-  void _authenticate() {
-    print('email: $email');
+  void _authenticate() async {
+    await signUp(email, password);
   }
 
   @override
